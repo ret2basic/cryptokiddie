@@ -1,0 +1,1 @@
+def shift_decrypt(ciphertext, k):
