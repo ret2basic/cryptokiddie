@@ -1,4 +1,4 @@
-def cbc_cca(cc: bytes, mm: bytes):
+def cbc_cca(decrypted: bytes):
 	"""
 	Description:
 
@@ -7,8 +7,7 @@ def cbc_cca(cc: bytes, mm: bytes):
 	
 	Args:
 
-	- cc: a byte string containing two identical blocks as ciphertext
-	- mm: a byte string containing the output from the decryption oracle
+	- decrypted: a byte string containing the output we get from the decryption oracle
 
 	Output:
 
@@ -19,12 +18,9 @@ def cbc_cca(cc: bytes, mm: bytes):
 	The ciphertext cc must contain two identical blocks. Two 16-byte blocks containing
 	only null bytes are recommended.
 	"""
-	assert len(cc) == 32, "The first argument must be a 32-byte byte string."
-	assert cc[:16] == cc[16:], "The first argument must have the same block 1 and block 2."
-	
-	p0 = mm[:16]
-	p1 = mm[16:]
+	p0 = decrypted[:16]
+	p1 = decrypted[16:]
 
-	iv = xor(xor(p0, p1), cc[:16])
+	iv = xor(xor(p0, p1), b"\x00" * 16)
 
 	return iv
