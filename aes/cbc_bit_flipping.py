@@ -1,4 +1,4 @@
-def cbc_bit_flipping(cookie: string, message: string, position: list, target: list) -> bytes:
+def cbc_bit_flipping(cookie: bytes, message: string, position: list, target: list) -> bytes:
 	"""
 	Description:
 
@@ -7,14 +7,14 @@ def cbc_bit_flipping(cookie: string, message: string, position: list, target: li
 
 	Args:
 
-	- cookie: as hex string
+	- cookie: the user cookie as a byte string
 	- message: a plaintext string, for example, "admin=False"
 	- position: an integer list containing indices in the message, for example, [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
 	- target: a list of desired outcome after flipping, for example, ["a", "d", "m", "i", "n", "=", "T", "r", "u", "e"]
 	
 	Output:
 
-	- result: the flipped cookie as byte string
+	- flipped_cookie: the flipped cookie as byte string
 
 	Caution:
 
@@ -22,11 +22,11 @@ def cbc_bit_flipping(cookie: string, message: string, position: list, target: li
 	and modify the content starting from the second block.
 	"""
 	l = len(position)
-	result = bytes.fromhex(cookie)
+	flipped_cookie = cookie # Just for initialization
 
 	for i in range(l):
 		change = position[i] - 16 # Change the ciphertext from the previous block
-		flipped = xor(message.encode()[position[i]], target[i], bytes.fromhex(cookie)[change]) # Bit flipping
-		result = result[:change] + flipped + result[change+1:]
+		flipped_byte = xor(message.encode()[position[i]], target[i], bytes.fromhex(cookie)[change]) # Bit flipping
+		flipped_cookie = flipped_cookie[:change] + flipped_byte + flipped_cookie[change+1:]
 
-	return result
+	return flipped_cookie
