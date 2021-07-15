@@ -18,9 +18,9 @@ def cbc_cca(decrypted: bytes):
 	The ciphertext cc must contain two identical blocks. Two 16-byte blocks containing
 	only null bytes are recommended.
 	"""
-	p0 = decrypted[:16]
-	p1 = decrypted[16:]
+	m_0 = decrypted[:16]
+	m_1 = decrypted[16:]
 
-	iv = xor(xor(p0, p1), b"\x00" * 16)
+	iv = xor(m_0, m_1)
 
 	return iv
